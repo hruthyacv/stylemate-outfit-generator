@@ -56,7 +56,7 @@
             <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload clothing image">
               <div class="drop-zone-inner">
                 <div class="drop-icon">📷</div>
-                <p class="drop-text">Drag & drop or <span class="drop-link">browse</span></p>
+                <p class="drop-text">Drag &amp; drop or <span class="drop-link">browse</span></p>
                 <p class="drop-sub">JPG, PNG, WEBP — up to 5MB</p>
               </div>
               <input type="file" id="fileInput" accept="image/*" hidden aria-label="Upload image file" />
@@ -206,7 +206,7 @@
     <!-- ============================
          SECTION 3 — OUTPUT
          ============================ -->
-    <section class="section output-section" id="outputSection" aria-live="polite" hidden>
+    <section class="section output-section" id="outputSection" hidden>
       <div class="section-label">03 / Your Look</div>
       <h2 class="section-title">Today's Outfit</h2>
 
@@ -214,9 +214,7 @@
       <div class="outfit-badges" id="outfitBadges"></div>
 
       <!-- Outfit cards grid -->
-      <div class="outfit-grid" id="outfitGrid">
-        <!-- Outfit pieces injected by JS -->
-      </div>
+      <div class="outfit-grid" id="outfitGrid"></div>
 
       <!-- Styling Tip -->
       <div class="styling-tip" id="stylingTip">
@@ -241,8 +239,12 @@
   <!-- ===== TOAST NOTIFICATION ===== -->
   <div class="toast" id="toast" role="alert" aria-atomic="true"></div>
 
-  <!-- ===== MODAL: Delete Confirm ===== -->
-  <div class="modal-overlay" id="modalOverlay" hidden>
+  <!-- ===== MODAL: Delete Confirm =====
+       IMPORTANT: No "hidden" attribute here.
+       Visibility is controlled by .is-open class in CSS only,
+       which fixes the display:flex override bug.
+  -->
+  <div class="modal-overlay" id="modalOverlay">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h3 class="modal-title" id="modalTitle">Remove Item?</h3>
       <p class="modal-body">This will permanently remove this piece from your wardrobe.</p>
