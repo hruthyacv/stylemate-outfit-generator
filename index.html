@@ -1,260 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StyleMate — Your AI Wardrobe Stylist</title>
-
-  <!-- Google Fonts: Editorial luxury pairing -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleMate — Virtual Wardrobe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ===== NOISE OVERLAY for texture ===== -->
-  <div class="noise-overlay" aria-hidden="true"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
 
-  <!-- ===== HEADER ===== -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo-block">
-        <span class="logo-icon">✦</span>
-        <h1 class="logo-text">StyleMate</h1>
-      </div>
-      <p class="tagline"><em>Curate your look, effortlessly.</em></p>
-      <div class="header-actions">
-        <button class="btn-ghost" id="clearWardrobeBtn" title="Clear all saved items">
-          ✕ Clear Wardrobe
-        </button>
-        <span class="wardrobe-count" id="wardrobeCount">0 items</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===== MAIN CONTENT ===== -->
-  <main class="main-content">
-
-    <!-- ============================
-         SECTION 1 — UPLOAD WARDROBE
-         ============================ -->
-    <section class="section" id="uploadSection">
-      <div class="section-label">01 / Build Your Wardrobe</div>
-      <h2 class="section-title">Upload Your Clothes</h2>
-      <p class="section-desc">
-        Add pieces from your wardrobe. Tag each item so StyleMate can style you intelligently.
-      </p>
-
-      <!-- Upload Form Card -->
-      <div class="upload-card">
-        <div class="upload-form-grid">
-
-          <!-- Drop Zone -->
-          <div class="drop-zone-wrapper">
-            <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload clothing image">
-              <div class="drop-zone-inner">
-                <div class="drop-icon">📷</div>
-                <p class="drop-text">Drag &amp; drop or <span class="drop-link">browse</span></p>
-                <p class="drop-sub">JPG, PNG, WEBP — up to 5MB</p>
-              </div>
-              <input type="file" id="fileInput" accept="image/*" hidden aria-label="Upload image file" />
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-block">
+                <span class="logo-icon">✦</span>
+                <h1 class="logo-text">STYLEMATE</h1>
             </div>
-            <!-- Preview of selected image before save -->
-            <div class="upload-preview-wrap" id="uploadPreviewWrap" hidden>
-              <img id="uploadPreviewImg" src="" alt="Selected clothing preview" class="upload-preview-img" />
-              <button class="remove-preview-btn" id="removePreviewBtn" aria-label="Remove selected image">✕</button>
+            <p class="tagline">Your Editorial AI Wardrobe</p>
+            <div class="header-actions">
+                <div class="wardrobe-count" id="wardrobeCountDisplay">0 ITEMS</div>
+                <button id="clearWardrobeBtn" class="btn-ghost small">Clear Wardrobe</button>
             </div>
-          </div>
+        </div>
+    </header>
 
-          <!-- Tag Fields -->
-          <div class="tag-fields">
-            <div class="field-group">
-              <label class="field-label" for="itemType">Category <span class="required">*</span></label>
-              <div class="select-wrapper">
-                <select id="itemType" class="field-select">
-                  <option value="">Select category…</option>
-                  <option value="top">👕 Top</option>
-                  <option value="bottom">👖 Bottom</option>
-                  <option value="shoes">👟 Shoes</option>
-                  <option value="accessory">💍 Accessory</option>
-                </select>
-              </div>
-            </div>
+    <main class="main-content">
 
-            <div class="field-group">
-              <label class="field-label" for="itemStyle">Style <span class="required">*</span></label>
-              <div class="select-wrapper">
-                <select id="itemStyle" class="field-select">
-                  <option value="">Select style…</option>
-                  <option value="casual">🌿 Casual</option>
-                  <option value="formal">🎩 Formal</option>
-                  <option value="party">🎉 Party</option>
-                  <option value="sporty">⚡ Sporty</option>
-                  <option value="business">💼 Business</option>
-                  <option value="boho">🌸 Boho</option>
-                </select>
-              </div>
-            </div>
+        <section class="section" id="uploadSection">
+            <div class="section-label">01 / Build Your Wardrobe</div>
+            <h2 class="section-title">Upload Your Clothes</h2>
+            <p class="section-desc">Add photos from your wardrobe. Tag each item so StyleMate can style you intelligently.</p>
 
-            <div class="field-group">
-              <label class="field-label" for="itemColor">Color <span class="optional">(optional)</span></label>
-              <div class="color-input-row">
-                <input type="color" id="itemColorPicker" class="color-swatch" value="#3a3a3a" aria-label="Pick color" />
-                <input type="text" id="itemColor" class="field-input" placeholder="e.g. navy blue, beige…" maxlength="30" />
-              </div>
+            <div class="upload-card">
+                <div class="upload-form-grid">
+                    
+                    <div class="drop-zone-wrapper">
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        
+                        <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Upload clothing image">
+                            <div class="drop-zone-inner">
+                                <div class="drop-icon">➕</div>
+                                <p class="drop-text">Drag & drop or <span class="drop-link">browse</span></p>
+                                <p class="drop-sub">JPG, PNG or WEBP (max 5MB)</p>
+                            </div>
+                        </div>
+
+                        <div class="upload-preview-wrap" id="uploadPreviewWrap" hidden>
+                            <img src="" alt="Preview" id="uploadPreviewImg" class="upload-preview-img">
+                            <button type="button" id="removePreviewBtn" class="remove-preview-btn" aria-label="Remove image">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="tag-fields">
+                        <div class="field-group">
+                            <label class="field-label">Category <span class="required">*</span></label>
+                            <div class="select-wrapper">
+                                <select id="itemType" class="field-select">
+                                    <option value="" disabled selected>Select category...</option>
+                                    <option value="top">Top</option>
+                                    <option value="bottom">Bottom</option>
+                                    <option value="shoes">Shoes</option>
+                                    <option value="accessory">Accessory</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Style <span class="required">*</span></label>
+                            <div class="select-wrapper">
+                                <select id="itemStyle" class="field-select">
+                                    <option value="casual" selected>Casual</option>
+                                    <option value="formal">Formal</option>
+                                    <option value="party">Party</option>
+                                    <option value="sporty">Sporty</option>
+                                    <option value="business">Business</option>
+                                    <option value="boho">Boho</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">Main Color <span class="optional">(Auto-detected)</span></label>
+                            <div class="color-input-row">
+                                <input type="color" id="itemColor" class="color-swatch" value="#1C1A17">
+                                <input type="text" id="colorHexText" class="field-input" value="#1C1A17" readonly>
+                            </div>
+                        </div>
+
+                        <button id="addBtn" class="btn-primary" style="margin-top: 10px;">
+                            <span>Add to Wardrobe</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="upload-feedback" id="uploadFeedback" aria-live="polite"></div>
             </div>
 
-            <div class="field-group">
-              <label class="field-label" for="itemWeight">Weight / Warmth</label>
-              <div class="select-wrapper">
-                <select id="itemWeight" class="field-select">
-                  <option value="light">☀️ Light (summer)</option>
-                  <option value="medium" selected>🍂 Medium (all-season)</option>
-                  <option value="heavy">❄️ Heavy (winter)</option>
-                </select>
-              </div>
-            </div>
+            <div class="wardrobe-section" id="wardrobeSection">
+                <h3 class="sub-heading">Your Collection</h3>
+                
+                <div class="wardrobe-tabs">
+                    <button class="tab-btn active" data-filter="all">All</button>
+                    <button class="tab-btn" data-filter="top">Tops</button>
+                    <button class="tab-btn" data-filter="bottom">Bottoms</button>
+                    <button class="tab-btn" data-filter="shoes">Shoes</button>
+                    <button class="tab-btn" data-filter="accessory">Accessories</button>
+                </div>
 
-            <div class="field-group">
-              <label class="field-label" for="itemName">Label <span class="optional">(optional)</span></label>
-              <input type="text" id="itemName" class="field-input" placeholder="e.g. White Oxford Shirt…" maxlength="40" />
+                <div class="wardrobe-grid" id="wardrobeGrid">
+                    <div class="wardrobe-empty" id="wardrobeEmpty">
+                        <div class="empty-icon">✨</div>
+                        <p>Your wardrobe is empty.<br>Start by uploading your favorite pieces above.</p>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <button class="btn-primary" id="addItemBtn">
-              <span>✦ Add to Wardrobe</span>
+        <hr style="border: 0; border-top: 1px solid rgba(28,26,23,0.08); margin: var(--space-3xl) 0;">
+
+        <section class="section" id="preferencesSection">
+            <div class="section-label">02 / Style Direction</div>
+            <h2 class="section-title">What's the vibe?</h2>
+            
+            <div class="pref-grid">
+                <div class="pref-card">
+                    <h4 class="pref-card-title">Occasion Style</h4>
+                    <div class="chip-group" id="prefStyleGroup">
+                        <button class="chip active" data-value="casual">Casual</button>
+                        <button class="chip" data-value="formal">Formal</button>
+                        <button class="chip" data-value="party">Party</button>
+                        <button class="chip" data-value="business">Business</button>
+                    </div>
+                </div>
+
+                <div class="pref-card">
+                    <h4 class="pref-card-title">Current Weather</h4>
+                    <div class="chip-group" id="prefWeatherGroup">
+                        <button class="chip" data-value="cold">Cold</button>
+                        <button class="chip" data-value="cool">Cool</button>
+                        <button class="chip active" data-value="warm">Warm</button>
+                        <button class="chip" data-value="hot">Hot</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="generate-section">
+            <button id="generateBtn" class="btn-generate">
+                <span class="generate-icon">✦</span>
+                <span class="generate-text">Generate Outfit</span>
+                <span class="generate-sub">Powered by StyleMate AI</span>
             </button>
-          </div>
-
         </div>
 
-        <!-- Upload feedback message -->
-        <div class="upload-feedback" id="uploadFeedback" aria-live="polite"></div>
-      </div>
+        <section class="section" id="outputSection" hidden>
+            <div class="section-label">03 / Your Personal Look</div>
+            
+            <div class="output-section">
+                <div class="outfit-badges" id="outfitBadges">
+                    </div>
 
-      <!-- Wardrobe Grid (saved items) -->
-      <div class="wardrobe-section" id="wardrobeSection">
-        <h3 class="sub-heading">My Wardrobe</h3>
-        <div class="wardrobe-tabs">
-          <button class="tab-btn active" data-filter="all">All</button>
-          <button class="tab-btn" data-filter="top">Tops</button>
-          <button class="tab-btn" data-filter="bottom">Bottoms</button>
-          <button class="tab-btn" data-filter="shoes">Shoes</button>
-          <button class="tab-btn" data-filter="accessory">Accessories</button>
+                <div class="outfit-grid" id="outfitGrid">
+                    </div>
+
+                <div class="styling-tip">
+                    <div class="tip-label">Stylist Tip</div>
+                    <p class="tip-text" id="stylingTipText">
+                        "Try tucking the top to define your silhouette and adding a minimal accessory for an effortless editorial feel."
+                    </p>
+                </div>
+
+                <div class="output-actions">
+                    <button id="saveOutfitBtn" class="btn-primary" style="width: auto;">Save to Favorites</button>
+                    <button id="regenBtn" class="btn-secondary">Try Another</button>
+                    <button id="shareBtn" class="btn-ghost">Share Look</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 StyleMate. Curating your digital closet.</p>
+    </footer>
+
+    <div id="toast" class="toast">Message goes here</div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 class="modal-title" id="modalTitle">Are you sure?</h3>
+            <p class="modal-body" id="modalBody">This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-ghost" id="modalCancel">Cancel</button>
+                <button class="btn-danger" id="modalConfirm">Confirm</button>
+            </div>
         </div>
-        <div class="wardrobe-grid" id="wardrobeGrid">
-          <!-- Wardrobe items injected by JS -->
-          <div class="wardrobe-empty" id="wardrobeEmpty">
-            <div class="empty-icon">🪞</div>
-            <p>Your wardrobe is empty.<br />Upload your first piece above.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================
-         SECTION 2 — PREFERENCES
-         ============================ -->
-    <section class="section" id="preferencesSection">
-      <div class="section-label">02 / Set the Scene</div>
-      <h2 class="section-title">Outfit Preferences</h2>
-      <p class="section-desc">
-        Tell StyleMate the occasion and weather — or skip both for a random surprise.
-      </p>
-
-      <div class="pref-grid">
-        <!-- Style Preference -->
-        <div class="pref-card">
-          <h3 class="pref-card-title">Occasion Style</h3>
-          <div class="chip-group" id="styleChips">
-            <button class="chip active" data-value="">✨ Surprise Me</button>
-            <button class="chip" data-value="casual">🌿 Casual</button>
-            <button class="chip" data-value="formal">🎩 Formal</button>
-            <button class="chip" data-value="party">🎉 Party</button>
-            <button class="chip" data-value="sporty">⚡ Sporty</button>
-            <button class="chip" data-value="business">💼 Business</button>
-            <button class="chip" data-value="boho">🌸 Boho</button>
-          </div>
-        </div>
-
-        <!-- Weather Preference -->
-        <div class="pref-card">
-          <h3 class="pref-card-title">Weather</h3>
-          <div class="chip-group" id="weatherChips">
-            <button class="chip active" data-value="">🌤 Any</button>
-            <button class="chip" data-value="hot">☀️ Hot</button>
-            <button class="chip" data-value="warm">🌤 Warm</button>
-            <button class="chip" data-value="cool">🍂 Cool</button>
-            <button class="chip" data-value="cold">❄️ Cold</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================
-         GENERATE BUTTON
-         ============================ -->
-    <section class="generate-section">
-      <button class="btn-generate" id="generateBtn">
-        <span class="generate-icon">✦</span>
-        <span class="generate-text">Generate My Outfit</span>
-        <span class="generate-sub">StyleMate will curate the perfect look</span>
-      </button>
-    </section>
-
-    <!-- ============================
-         SECTION 3 — OUTPUT
-         ============================ -->
-    <section class="section output-section" id="outputSection" hidden>
-      <div class="section-label">03 / Your Look</div>
-      <h2 class="section-title">Today's Outfit</h2>
-
-      <!-- Outfit tag badges -->
-      <div class="outfit-badges" id="outfitBadges"></div>
-
-      <!-- Outfit cards grid -->
-      <div class="outfit-grid" id="outfitGrid"></div>
-
-      <!-- Styling Tip -->
-      <div class="styling-tip" id="stylingTip">
-        <div class="tip-label">✦ Styling Tip</div>
-        <p class="tip-text" id="tipText"></p>
-      </div>
-
-      <!-- Regenerate -->
-      <div class="output-actions">
-        <button class="btn-secondary" id="regenerateBtn">↺ Generate Another</button>
-        <button class="btn-ghost small" id="scrollUpBtn">↑ Back to Wardrobe</button>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <p>StyleMate &mdash; All looks stored locally in your browser. No data leaves your device.</p>
-  </footer>
-
-  <!-- ===== TOAST NOTIFICATION ===== -->
-  <div class="toast" id="toast" role="alert" aria-atomic="true"></div>
-
-  <!-- ===== MODAL: Delete Confirm =====
-       IMPORTANT: No "hidden" attribute here.
-       Visibility is controlled by .is-open class in CSS only,
-       which fixes the display:flex override bug.
-  -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <h3 class="modal-title" id="modalTitle">Remove Item?</h3>
-      <p class="modal-body">This will permanently remove this piece from your wardrobe.</p>
-      <div class="modal-actions">
-        <button class="btn-ghost" id="modalCancelBtn">Cancel</button>
-        <button class="btn-danger" id="modalConfirmBtn">Remove</button>
-      </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
