@@ -1,18 +1,24 @@
+/* =====================================================
+   STYLEMATE — style.css
+   Aesthetic: Luxury Editorial Fashion — warm cream,
+   deep charcoal, gold accents. Cormorant + DM Sans.
+   ===================================================== */
 
+/* ===== CSS VARIABLES ===== */
 :root {
   /* Color Palette */
-  --cream:        #F9F5EF;
-  --cream-dark:   #EDE8DF;
-  --cream-mid:    #F3EEE6;
-  --charcoal:     #1C1A17;
-  --charcoal-mid: #2E2B26;
+  --cream:          #F9F5EF;
+  --cream-dark:     #EDE8DF;
+  --cream-mid:      #F3EEE6;
+  --charcoal:       #1C1A17;
+  --charcoal-mid:   #2E2B26;
   --charcoal-light: #5C5750;
-  --gold:         #B8973A;
-  --gold-light:   #D4AE56;
-  --gold-pale:    #EDD98A;
-  --blush:        #E6C9B4;
-  --sage:         #8FA88C;
-  --white:        #FFFFFF;
+  --gold:           #B8973A;
+  --gold-light:     #D4AE56;
+  --gold-pale:      #EDD98A;
+  --blush:          #E6C9B4;
+  --sage:           #8FA88C;
+  --white:          #FFFFFF;
 
   /* Typography */
   --font-display: 'Cormorant Garamond', Georgia, serif;
@@ -29,25 +35,31 @@
   --space-3xl: 96px;
 
   /* Radii */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
   --radius-pill: 999px;
 
   /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(28,26,23,0.08);
-  --shadow-md:  0 4px 16px rgba(28,26,23,0.10);
-  --shadow-lg:  0 12px 40px rgba(28,26,23,0.14);
+  --shadow-sm:   0 1px 3px rgba(28,26,23,0.08);
+  --shadow-md:   0 4px 16px rgba(28,26,23,0.10);
+  --shadow-lg:   0 12px 40px rgba(28,26,23,0.14);
   --shadow-gold: 0 4px 24px rgba(184,151,58,0.18);
 
   /* Transitions */
-  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-in:    cubic-bezier(0.64, 0, 0.78, 0);
-  --dur-fast:   160ms;
-  --dur-mid:    280ms;
-  --dur-slow:   480ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in:  cubic-bezier(0.64, 0, 0.78, 0);
+  --dur-fast: 160ms;
+  --dur-mid:  280ms;
+  --dur-slow: 480ms;
 }
+
+/* ===== CRITICAL FIX: [hidden] must always override display:flex/grid =====
+   Without this, CSS rules like display:flex on .modal-overlay or
+   .output-section would override the HTML hidden attribute, causing
+   elements to stay visible when they should be hidden. */
+[hidden] { display: none !important; }
 
 /* ===== RESET & BASE ===== */
 *, *::before, *::after {
@@ -352,7 +364,13 @@ input, select, textarea {
 }
 
 .required { color: var(--gold); }
-.optional { color: var(--charcoal-light); opacity: 0.65; font-weight: 300; text-transform: none; letter-spacing: 0; }
+.optional {
+  color: var(--charcoal-light);
+  opacity: 0.65;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+}
 
 .select-wrapper {
   position: relative;
@@ -687,7 +705,6 @@ input, select, textarea {
 }
 
 .btn-generate:hover::before { opacity: 1; }
-
 .btn-generate:active { transform: translateY(-1px); }
 
 .generate-icon {
@@ -699,7 +716,7 @@ input, select, textarea {
 
 @keyframes pulse-gold {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.15); }
+  50%       { opacity: 0.7; transform: scale(1.15); }
 }
 
 .generate-text {
@@ -756,7 +773,7 @@ input, select, textarea {
   text-transform: uppercase;
 }
 
-.badge-style { background: var(--charcoal); color: var(--cream); }
+.badge-style   { background: var(--charcoal); color: var(--cream); }
 .badge-weather { background: var(--cream-dark); color: var(--charcoal); border: 1px solid rgba(28,26,23,0.1); }
 
 /* Outfit Grid */
@@ -961,16 +978,25 @@ input, select, textarea {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ===== MODAL ===== */
+/* ===== MODAL =====
+   BUG FIX: default is display:none.
+   JS adds .is-open class to show it with display:flex.
+   This avoids the conflict where display:flex in CSS
+   would override the HTML "hidden" attribute, permanently
+   showing the modal on page load. */
 .modal-overlay {
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(28,26,23,0.55);
   backdrop-filter: blur(4px);
   z-index: 500;
-  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.modal-overlay.is-open {
+  display: flex;
   animation: fade-in var(--dur-mid) var(--ease-out);
 }
 
@@ -1019,6 +1045,15 @@ input, select, textarea {
   opacity: 0.7;
 }
 
+/* ===== SHAKE ANIMATION (for validation errors) ===== */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 700px) {
   .main-content { padding: var(--space-xl) var(--space-md); }
@@ -1048,9 +1083,4 @@ input, select, textarea {
   .outfit-grid {
     grid-template-columns: 1fr 1fr;
   }
-  /* FIX: modal should never show by default */
-.modal-overlay[hidden] {
-display: none !important;
-}
-
 }
