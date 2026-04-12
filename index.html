@@ -1,276 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StyleMate — AI Outfit Generator</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StyleMate — AI Outfit Generator</title>
 
-  <!-- Luxury font pairing: Cormorant Garamond (display) + DM Serif Display + Jost (body) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════
-       BACKGROUND CANVAS (animated particles)
-  ═══════════════════════════════════════════════ -->
-  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-  <!-- ═══════════════════════════════════════════════
-       HEADER
-  ═══════════════════════════════════════════════ -->
-  <header class="site-header">
-    <!-- Light streak decoration -->
-    <div class="header-streak" aria-hidden="true"></div>
-
-    <div class="header-inner">
-      <div class="logo-wrap">
-        <!-- Sparkle icons flanking title -->
-        <span class="logo-sparkle left" aria-hidden="true">✦</span>
-        <div class="logo-group">
-          <h1 class="logo-title">StyleMate</h1>
-          <div class="logo-glow-line" aria-hidden="true"></div>
-          <p class="logo-subtitle">AI&nbsp;Powered&nbsp;Outfit&nbsp;Generator</p>
+    <header class="site-header">
+        <div class="header-streak" aria-hidden="true"></div>
+        <div class="header-inner">
+            <div class="logo-wrap">
+                <span class="logo-sparkle left" aria-hidden="true">✦</span>
+                <div class="logo-group">
+                    <h1 class="logo-title">StyleMate</h1>
+                    <div class="logo-glow-line" aria-hidden="true"></div>
+                    <p class="logo-subtitle">AI Powered Outfit Generator</p>
+                </div>
+                <span class="logo-sparkle right" aria-hidden="true">✦</span>
+            </div>
         </div>
-        <span class="logo-sparkle right" aria-hidden="true">✦</span>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- ═══════════════════════════════════════════════
-       MAIN THREE-COLUMN LAYOUT
-  ═══════════════════════════════════════════════ -->
-  <main class="main-layout">
+    <main class="main-layout">
 
-    <!-- ──────────────────────────────────
-         LEFT COLUMN — UPLOAD CARD
-    ────────────────────────────────── -->
-    <aside class="panel panel-upload" id="uploadPanel">
+        <aside class="panel panel-upload" id="uploadPanel">
+            <div class="panel-header">
+                <div class="panel-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="23" stroke="url(#ug1)" stroke-width="1.5"/>
+                        <path d="M24 32V18M17 25l7-8 7 8M16 34h16" stroke="url(#ug2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="ug1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#C0C0C0"/><stop offset="1" stop-color="#888"/>
+                            </linearGradient>
+                            <linearGradient id="ug2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#E8E8E8"/><stop offset="1" stop-color="#A0A0A0"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h2 class="panel-title">Upload Piece</h2>
+                <p class="panel-subtitle">Add clothing to your wardrobe</p>
+            </div>
 
-      <div class="panel-header">
-        <!-- Upload icon -->
-        <div class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="23" stroke="url(#ug1)" stroke-width="1.5"/>
-            <path d="M24 32V18" stroke="url(#ug2)" stroke-width="2" stroke-linecap="round"/>
-            <path d="M17 25l7-8 7 8" stroke="url(#ug2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M16 34h16" stroke="url(#ug2)" stroke-width="2" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="ug1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#C0C0C0"/>
-                <stop offset="1" stop-color="#888"/>
-              </linearGradient>
-              <linearGradient id="ug2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#E8E8E8"/>
-                <stop offset="1" stop-color="#A0A0A0"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h2 class="panel-title">Upload Piece</h2>
-        <p class="panel-subtitle">Add clothing to your wardrobe</p>
-      </div>
+            <div class="drop-zone" id="dropZone" role="button" aria-label="Upload Image">
+                <div class="drop-zone-content" id="dropContent">
+                    <div class="drop-arrow" aria-hidden="true">↑</div>
+                    <p class="drop-label">Drop image here</p>
+                    <p class="drop-sub">or click to browse</p>
+                </div>
+                <img class="drop-preview" id="dropPreview" src="" alt="Preview" hidden />
+                <input type="file" id="fileInput" accept="image/*" hidden />
+            </div>
 
-      <!-- Drop Zone -->
-      <div class="drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Click or drag to upload image">
-        <div class="drop-zone-content" id="dropContent">
-          <div class="drop-arrow" aria-hidden="true">↑</div>
-          <p class="drop-label">Drop image here</p>
-          <p class="drop-sub">or click to browse</p>
-        </div>
-        <!-- Preview replaces content on selection -->
-        <img class="drop-preview" id="dropPreview" src="" alt="Preview" hidden />
-        <input type="file" id="fileInput" accept="image/*" hidden />
-      </div>
+            <div class="upload-form">
+                <div class="form-row">
+                    <label class="form-label" for="itemType">Category <span class="req">✦</span></label>
+                    <select id="itemType" class="form-select" required>
+                        <option value="">Select…</option>
+                        <option value="top">👕 Top</option>
+                        <option value="bottom">👖 Bottom</option>
+                        <option value="shoes">👟 Shoes</option>
+                        <option value="accessory">💍 Accessory</option>
+                    </select>
+                </div>
 
-      <!-- Form Fields -->
-      <div class="upload-form" id="uploadForm">
+                <div class="form-row">
+                    <label class="form-label" for="itemStyle">Style <span class="req">✦</span></label>
+                    <select id="itemStyle" class="form-select" required>
+                        <option value="">Select…</option>
+                        <option value="casual">🌿 Casual</option>
+                        <option value="formal">🎩 Formal</option>
+                        <option value="party">🎉 Party</option>
+                        <option value="sporty">⚡ Sporty</option>
+                        <option value="business">💼 Business</option>
+                    </select>
+                </div>
 
-        <div class="form-row">
-          <label class="form-label" for="itemType">Category <span class="req">✦</span></label>
-          <div class="select-wrap">
-            <select id="itemType" class="form-select">
-              <option value="">Select…</option>
-              <option value="top">👕 Top</option>
-              <option value="bottom">👖 Bottom</option>
-              <option value="shoes">👟 Shoes</option>
-              <option value="accessory">💍 Accessory</option>
-            </select>
-          </div>
-        </div>
+                <div class="form-row">
+                    <label class="form-label" for="itemWeight">Warmth</label>
+                    <select id="itemWeight" class="form-select">
+                        <option value="light">☀️ Light</option>
+                        <option value="medium" selected>🍂 Medium</option>
+                        <option value="heavy">❄️ Heavy</option>
+                    </select>
+                </div>
 
-        <div class="form-row">
-          <label class="form-label" for="itemStyle">Style <span class="req">✦</span></label>
-          <div class="select-wrap">
-            <select id="itemStyle" class="form-select">
-              <option value="">Select…</option>
-              <option value="casual">🌿 Casual</option>
-              <option value="formal">🎩 Formal</option>
-              <option value="party">🎉 Party</option>
-              <option value="sporty">⚡ Sporty</option>
-              <option value="business">💼 Business</option>
-            </select>
-          </div>
-        </div>
+                <div class="form-row">
+                    <label class="form-label" for="itemColor">Color</label>
+                    <div class="color-row">
+                        <input type="color" id="colorPicker" class="color-swatch" value="#1a1a1a" />
+                        <input type="text" id="itemColor" class="form-input" placeholder="e.g. midnight navy…" />
+                    </div>
+                </div>
 
-        <div class="form-row">
-          <label class="form-label" for="itemWeight">Warmth</label>
-          <div class="select-wrap">
-            <select id="itemWeight" class="form-select">
-              <option value="light">☀️ Light</option>
-              <option value="medium" selected>🍂 Medium</option>
-              <option value="heavy">❄️ Heavy</option>
-            </select>
-          </div>
-        </div>
+                <div class="form-row">
+                    <label class="form-label" for="itemName">Label</label>
+                    <input type="text" id="itemName" class="form-input" placeholder="e.g. Silk Blouse…" />
+                </div>
 
-        <div class="form-row">
-          <label class="form-label" for="itemColor">Color <span class="opt">(optional)</span></label>
-          <div class="color-row">
-            <input type="color" id="colorPicker" class="color-swatch" value="#1a1a1a" />
-            <input type="text"  id="itemColor"  class="form-input" placeholder="e.g. midnight navy…" maxlength="30" />
-          </div>
-        </div>
+                <button class="btn-primary" id="addBtn">
+                    <span class="btn-icon">✦</span> Add to Wardrobe
+                </button>
+                <div class="upload-msg" id="uploadMsg" aria-live="polite"></div>
+            </div>
+        </aside>
 
-        <div class="form-row">
-          <label class="form-label" for="itemName">Label <span class="opt">(optional)</span></label>
-          <input type="text" id="itemName" class="form-input" placeholder="e.g. Silk Blouse…" maxlength="40" />
-        </div>
+        <section class="panel panel-wardrobe">
+            <div class="panel-header center">
+                <h2 class="panel-title">My Wardrobe</h2>
+                <p class="panel-subtitle">Your curated collection</p>
+                <span class="item-count-badge" id="itemCount">0 pieces</span>
+            </div>
 
-        <button class="btn-primary" id="addBtn">
-          <span class="btn-icon" aria-hidden="true">✦</span>
-          Add to Wardrobe
-        </button>
+            <div class="filter-tabs" id="filterTabs" role="tablist">
+                <button class="tab active" data-filter="all">All</button>
+                <button class="tab" data-filter="top">Tops</button>
+                <button class="tab" data-filter="bottom">Bottoms</button>
+                <button class="tab" data-filter="shoes">Shoes</button>
+                <button class="tab" data-filter="accessory">Accessories</button>
+            </div>
 
-        <div class="upload-msg" id="uploadMsg" aria-live="polite"></div>
-      </div>
-    </aside>
+            <div class="wardrobe-strip" id="wardrobeStrip">
+                <div class="wardrobe-empty" id="wardrobeEmpty">
+                    <div class="empty-icon" aria-hidden="true">🪞</div>
+                    <p>Your wardrobe is empty.<br />Upload your first piece.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- ──────────────────────────────────
-         CENTER COLUMN — WARDROBE STRIP
-    ────────────────────────────────── -->
-    <section class="panel panel-wardrobe" id="wardrobePanel">
+        <aside class="panel panel-generator">
+            <div class="panel-header">
+                <h2 class="panel-title">Generate Outfit</h2>
+                <p class="panel-subtitle">Let AI curate your look</p>
+            </div>
 
-      <div class="panel-header center">
-        <h2 class="panel-title">My Wardrobe</h2>
-        <p class="panel-subtitle">Your curated collection</p>
-        <span class="item-count-badge" id="itemCount">0 pieces</span>
-      </div>
+            <div class="pref-section">
+                <div class="form-row">
+                    <label class="form-label">Occasion Style</label>
+                    <div class="chip-group" id="styleChips">
+                        <button class="chip active" data-value="">✨ Any</button>
+                        <button class="chip" data-value="casual">🌿 Casual</button>
+                        <button class="chip" data-value="formal">🎩 Formal</button>
+                        <button class="chip" data-value="party">🎉 Party</button>
+                    </div>
+                </div>
 
-      <!-- Filter tabs -->
-      <div class="filter-tabs" id="filterTabs" role="tablist">
-        <button class="tab active" data-filter="all"       role="tab">All</button>
-        <button class="tab"        data-filter="top"       role="tab">Tops</button>
-        <button class="tab"        data-filter="bottom"    role="tab">Bottoms</button>
-        <button class="tab"        data-filter="shoes"     role="tab">Shoes</button>
-        <button class="tab"        data-filter="accessory" role="tab">Accessories</button>
-      </div>
+                <div class="form-row">
+                    <label class="form-label">Weather</label>
+                    <div class="chip-group" id="weatherChips">
+                        <button class="chip active" data-value="">🌤 Any</button>
+                        <button class="chip" data-value="hot">☀️ Hot</button>
+                        <button class="chip" data-value="cold">❄️ Cold</button>
+                    </div>
+                </div>
+            </div>
 
-      <!-- Scrollable wardrobe strip -->
-      <div class="wardrobe-strip" id="wardrobeStrip">
-        <!-- Empty state -->
-        <div class="wardrobe-empty" id="wardrobeEmpty">
-          <div class="empty-icon" aria-hidden="true">🪞</div>
-          <p>Your wardrobe is empty.<br />Upload your first piece.</p>
-        </div>
-        <!-- Items injected by JS -->
-      </div>
-    </section>
+            <button class="btn-generate" id="generateBtn">
+                <span class="gen-icon">✦</span>
+                <span class="gen-label">Generate My Outfit</span>
+                <span class="loading-spinner" hidden></span>
+            </button>
 
-    <!-- ──────────────────────────────────
-         RIGHT COLUMN — OUTFIT GENERATOR
-    ────────────────────────────────── -->
-    <aside class="panel panel-generator" id="generatorPanel">
+            <div class="output-area" id="outputArea" hidden>
+                <div class="outfit-grid" id="outfitGrid"></div>
+                <div class="styling-tip">
+                    <div class="tip-header">✦ Styling Tip</div>
+                    <p class="tip-body" id="tipBody"></p>
+                </div>
+                <button class="btn-regen" id="regenBtn">↺ Generate Another</button>
+            </div>
 
-      <div class="panel-header">
-        <!-- Hanger icon -->
-        <div class="panel-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="23" stroke="url(#hg1)" stroke-width="1.5"/>
-            <path d="M24 12a4 4 0 014 4c0 2.5-4 5-4 5s-4-2.5-4-5a4 4 0 014-4z" stroke="url(#hg2)" stroke-width="1.5" stroke-linejoin="round"/>
-            <path d="M24 21c-8 4-10 8-10 10h20c0-2-2-6-10-10z" stroke="url(#hg2)" stroke-width="1.5" stroke-linejoin="round"/>
-            <defs>
-              <linearGradient id="hg1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#C0C0C0"/>
-                <stop offset="1" stop-color="#888"/>
-              </linearGradient>
-              <linearGradient id="hg2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#E8E8E8"/>
-                <stop offset="1" stop-color="#A0A0A0"/>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <h2 class="panel-title">Generate Outfit</h2>
-        <p class="panel-subtitle">Let AI curate your look</p>
-      </div>
+            <div class="gen-error" id="genError" hidden></div>
+        </aside>
 
-      <!-- Preference selectors -->
-      <div class="pref-section">
-        <div class="form-row">
-          <label class="form-label">Occasion Style</label>
-          <div class="chip-group" id="styleChips">
-            <button class="chip active" data-value="">✨ Any</button>
-            <button class="chip" data-value="casual">🌿 Casual</button>
-            <button class="chip" data-value="formal">🎩 Formal</button>
-            <button class="chip" data-value="party">🎉 Party</button>
-            <button class="chip" data-value="sporty">⚡ Sporty</button>
-            <button class="chip" data-value="business">💼 Business</button>
-          </div>
-        </div>
+    </main>
 
-        <div class="form-row">
-          <label class="form-label">Weather</label>
-          <div class="chip-group" id="weatherChips">
-            <button class="chip active" data-value="">🌤 Any</button>
-            <button class="chip" data-value="hot">☀️ Hot</button>
-            <button class="chip" data-value="warm">🌤 Warm</button>
-            <button class="chip" data-value="cool">🍂 Cool</button>
-            <button class="chip" data-value="cold">❄️ Cold</button>
-          </div>
-        </div>
-      </div>
+    <div class="toast" id="toast" role="alert"></div>
 
-      <!-- Generate button -->
-      <button class="btn-generate" id="generateBtn">
-        <span class="gen-icon" aria-hidden="true">✦</span>
-        <span class="gen-label">Generate My Outfit</span>
-        <span class="gen-sub">AI will curate the perfect look</span>
-      </button>
-
-      <!-- Output area -->
-      <div class="output-area" id="outputArea" hidden>
-
-        <!-- Outfit image grid -->
-        <div class="outfit-grid" id="outfitGrid"></div>
-
-        <!-- Styling tip -->
-        <div class="styling-tip" id="stylingTip">
-          <div class="tip-header">
-            <span class="tip-star" aria-hidden="true">✦</span>
-            Styling Tip
-          </div>
-          <p class="tip-body" id="tipBody"></p>
-        </div>
-
-        <!-- Regenerate -->
-        <button class="btn-regen" id="regenBtn">↺ Generate Another Look</button>
-      </div>
-
-      <!-- Error message -->
-      <div class="gen-error" id="genError" hidden></div>
-    </aside>
-
-  </main>
-
-  <!-- ═══════════════════════════════════════════════
-       TOAST NOTIFICATION
-  ═══════════════════════════════════════════════ -->
-  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
-
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
