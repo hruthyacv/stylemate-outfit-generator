@@ -2,7 +2,7 @@
 
 An AI-powered wardrobe manager and outfit generator. Upload your clothing, and StyleMate will build coordinated outfits using color theory and Google Gemini.
 
-# try: https://stylemate-api-jmhx.onrender.com/
+ try: https://stylemate-api-jmhx.onrender.com/
 
 ## Overview
 
