@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleMate – AI-Powered Outfit Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <div class="top-nav">
+        <div class="user-profile hidden" id="user-profile">
+            <span class="user-greeting" id="user-greeting">Welcome</span>
+            <button id="logout-btn" class="nav-btn">Logout</button>
+        </div>
+    </div>
+
+    <header class="header">
+        <h1 class="logo">StyleMate</h1>
+        <h2 class="subtitle">AI &bull; POWERED &bull; OUTFIT &bull; GENERATOR</h2>
+    </header>
+
+    <main class="main-container hidden" id="main-app">
+        <!-- LEFT: Upload Panel -->
+        <section class="panel upload-panel glass-card">
+            <div class="panel-header">
+                <img src="{{ url_for('static', filename='upload-icon.png') }}" class="panel-icon custom-icon" alt="Upload Icon" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNhMGEwYTAiIHN0cm9rZS13aWR0aD0iMiI+PHBhdGggZD0iTTIxIDE1djRhMiAyIDAgMCAxLTIgMkg1YTIgMiAwIDAgMS0yLTJ2LTRNMTcgOGwtNS01LTUgNU0xMiAzdjEyIi8+PC9zdmc+'">
+                <h3>UPLOAD</h3>
+                <p class="section-desc">Add a piece to your wardrobe</p>
+            </div>
+            <form id="upload-form">
+                <div class="form-group">
+                    <label for="image-upload" class="file-upload-label" id="drop-zone">
+                        <span id="upload-text">Select Image</span>
+                        <input type="file" id="image-upload" name="image" accept="image/*" required>
+                    </label>
+                    <div id="image-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="name">Item Name / Label (Optional)</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Vintage Denim Jacket">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="one-piece">One-Piece (Dress/Jumpsuit)</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="accessory">Accessory</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="style">Style</label>
+                    <select id="style" name="style">
+                        <option value="casual">Casual</option>
+                        <option value="formal">Formal</option>
+                        <option value="party">Party</option>
+                        <option value="minimalist">Minimalist</option>
+                        <option value="streetwear">Streetwear</option>
+                        <option value="traditional">Traditional</option>
+                        <option value="sporty">Sporty</option>
+                        <option value="winter">Winter</option>
+                        <option value="summer">Summer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="color">Color (Optional)</label>
+                    <input type="text" id="color" name="color" placeholder="e.g. Black, Navy">
+                </div>
+                <button type="submit" class="btn-primary">Add to Wardrobe</button>
+            </form>
+        </section>
+
+        <!-- CENTER: Wardrobe Strip -->
+        <section class="panel wardrobe-panel">
+            <div class="panel-header center-header">
+                <h3>MY WARDROBE</h3>
+                <p class="wardrobe-count" id="wardrobe-count">0 ITEMS</p>
+            </div>
+            
+            <div class="wardrobe-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="top">Tops</button>
+                <button class="filter-btn" data-filter="bottom">Bottoms</button>
+                <button class="filter-btn" data-filter="one-piece">One-Pieces</button>
+                <button class="filter-btn" data-filter="shoes">Shoes</button>
+                <button class="filter-btn" data-filter="accessory">Accessories</button>
+            </div>
+
+            <div class="wardrobe-grid" id="wardrobe-container">
+                <!-- Wardrobe items injected here -->
+            </div>
+            
+            <div id="empty-state" class="empty-state hidden">
+                <h4>Your wardrobe is waiting.</h4>
+                <p>Upload your first pieces and let StyleMate build your look.</p>
+            </div>
+        </section>
+
+        <!-- RIGHT: Outfit Generator Panel -->
+        <section class="panel right-panel">
+            <div class="glass-card generator-panel">
+                <div class="panel-header">
+                    <img src="{{ url_for('static', filename='hanger-icon.png') }}" class="panel-icon custom-icon" alt="Hanger Icon" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNhMGEwYTAiIHN0cm9rZS13aWR0aD0iMiI+PHBhdGggZD0iTTIwLjM4IDMuNDZMMTYgMmE4IDggMCAwMS04IDBMMy42MiAzLjQ2YTIgMiAwIDAwLTEuMzQgMi4yM2wuNTggMy40N2ExIDEgMCAwMC45OS44NEg2djEwYzAgMS4xLjkgMiAyIDJoOGEyIDIgMCAwMDItMlYxMGgyLjE1YTEgMSAwIDAwLjk5LS44NGwuNTgtMy40N2EyIDIgMCAwMC0xLjM0LTIuMjN6Ii8+PC9zdmc+'">
+                    <h3>YOUR OUTFIT</h3>
+                </div>
+                
+                <div class="generator-controls">
+                    <div class="form-group">
+                        <label for="gen-style">Occasion / Style</label>
+                        <select id="gen-style">
+                            <option value="casual">Casual</option>
+                            <option value="formal">Formal</option>
+                            <option value="party">Party</option>
+                            <option value="minimalist">Minimalist</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gen-weather">Weather</label>
+                        <select id="gen-weather">
+                            <option value="sunny">Sunny / Warm</option>
+                            <option value="hot">Hot / Summer</option>
+                            <option value="rainy">Rainy</option>
+                            <option value="cold">Cold / Winter</option>
+                        </select>
+                    </div>
+                    <button id="generate-btn" class="btn-primary glowing-btn">Generate Outfit</button>
+                </div>
+
+                <div id="outfit-result" class="outfit-result hidden">
+                    <div class="outfit-grid" id="outfit-grid">
+                        <!-- Outfit images injected here -->
+                    </div>
+                    <div class="ai-suggestion">
+                        <h4 class="aesthetic-title" id="ai-aesthetic"></h4>
+                        <p class="outfit-desc" id="ai-desc"></p>
+                        <div class="styling-tip">
+                            <strong>Tip:</strong> <span id="ai-tip"></span>
+                        </div>
+                    </div>
+                    <button id="save-look-btn" class="btn-secondary">Save Look</button>
+                </div>
+            </div>
+
+            <!-- SAVED LOOKS -->
+            <div class="glass-card saved-looks-panel">
+                <h4>Saved Looks</h4>
+                <div class="saved-looks-list" id="saved-looks-container">
+                    <!-- Saved looks will appear here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AUTH OVERLAY -->
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content auth-content">
+            <div class="panel-header">
+                <h1 class="logo auth-logo">StyleMate</h1>
+                <p class="section-desc">Authenticate to access your private wardrobe</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login">Login</button>
+                <button class="auth-tab" id="tab-register">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <div id="login-error" class="error-msg hidden"></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="hidden">
+                <div id="register-error" class="error-msg hidden"></div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="reg-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="reg-confirm" required>
+                </div>
+                <button type="submit" class="btn-primary glowing-btn">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content">
+            <div class="panel-header">
+                <h3>EDIT ITEM</h3>
+            </div>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-image" class="file-upload-label" id="edit-drop-zone">
+                        <span id="edit-upload-text">Replace Image (Optional)</span>
+                        <input type="file" id="edit-image" name="image" accept="image/*">
+                    </label>
+                    <div id="edit-image-preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-name">Item Name / Label (Optional)</label>
+                    <input type="text" id="edit-name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="edit-category">Category</label>
+                    <select id="edit-category" name="category">
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="one-piece">One-Piece</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="accessory">Accessory</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-style">Style</label>
+                    <select id="edit-style" name="style">
+                        <option value="casual">Casual</option>
+                        <option value="formal">Formal</option>
+                        <option value="party">Party</option>
+                        <option value="minimalist">Minimalist</option>
+                        <option value="streetwear">Streetwear</option>
+                        <option value="traditional">Traditional</option>
+                        <option value="sporty">Sporty</option>
+                        <option value="winter">Winter</option>
+                        <option value="summer">Summer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-color">Color (Optional)</label>
+                    <input type="text" id="edit-color" name="color">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" id="cancel-edit-btn" class="btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
